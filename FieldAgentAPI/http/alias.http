@@ -1,0 +1,29 @@
+@url = http://localhost:8080/api/agent/alias
+
+GET {{url}}/2 HTTP/1.1
+
+###
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Jack of All Trades",
+    "persona": "international lock breaker",
+    "agentId": 2,
+}
+
+###
+
+POST {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Jack of All Trades",
+    "persona": "international lock breaker",
+    "agentId": 2,
+}
+
+###
+
+DELETE {{url}}/6 HTTP/1.1
