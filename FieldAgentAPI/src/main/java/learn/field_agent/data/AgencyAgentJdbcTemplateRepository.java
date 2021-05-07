@@ -21,7 +21,7 @@ public class AgencyAgentJdbcTemplateRepository implements AgencyAgentRepository 
     @Override
     public List<AgencyAgent> findAll() {
         final String sql = "select identifier, is_active, security_clearance_id "
-                + "from agency_agent";
+                + "from agency_agent;";
 
         return jdbcTemplate.query(sql, new AgencyAgentMapper());
     }

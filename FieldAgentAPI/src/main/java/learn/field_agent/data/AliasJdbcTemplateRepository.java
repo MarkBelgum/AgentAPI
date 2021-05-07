@@ -7,7 +7,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
@@ -22,9 +21,9 @@ public class AliasJdbcTemplateRepository implements AliasRepository {
 
     @Override
     public List<Alias> findByAgent(int agentId) {
-        final String sql = "select alias_id, 'name', persona, agent_id "
-                + "from alias"
-                + "where agent_id = ?";
+        final String sql = "select alias_id, name, persona, agent_id "
+                + "from alias "
+                + "where agent_id = ?;";
 
         return jdbcTemplate.query(sql, new AliasMapper(), agentId);
     }
@@ -32,8 +31,8 @@ public class AliasJdbcTemplateRepository implements AliasRepository {
     @Override
     public Alias add(Alias alias) {
 
-        final String sql = "insert into alias (alias_id, 'name', persona, agent_id) "
-                + "values (?,?,?,?,?,?)";
+        final String sql = "insert into alias (name, persona, agent_id) "
+                + "values (?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
@@ -56,15 +55,14 @@ public class AliasJdbcTemplateRepository implements AliasRepository {
     public boolean update(Alias alias) {
 
         final String sql = "update alias set "
-                + "alias_id = ?, "
-                + "'name' = ?, "
-                + "persona = ?, "
-                + "agent_id = ? ";
+                + "name = ?, "
+                + "persona = ? "
+                + "where alias_id = ? and agent_id = ?;";
 
         return jdbcTemplate.update(sql,
-                alias.getAliasId(),
                 alias.getName(),
                 alias.getPersona(),
+                alias.getAliasId(),
                 alias.getAgentId()) > 0;
 
     }

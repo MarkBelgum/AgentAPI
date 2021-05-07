@@ -72,18 +72,25 @@ public class SecurityClearanceService {
                 return result;
             }
         }
+
+        //comes out here if securityClearance not found
+        if (!repository.deleteById(securityClearanceId)) {
+            String msg = String.format("securityClearanceId: %s, not found", securityClearanceId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
         return result;
     }
 
     private Result<SecurityClearance> validate(SecurityClearance securityClearance) {
         Result<SecurityClearance> result = new Result<>();
         if (securityClearance == null) {
-            result.addMessage("securityClearance cannot be null", ResultType.INVALID);
+            result.addMessage("securityClearance cannot be null.", ResultType.INVALID);
             return result;
         }
 
         if (Validations.isNullOrBlank(securityClearance.getName())) {
-            result.addMessage("name is required", ResultType.INVALID);
+            result.addMessage("name is required.", ResultType.INVALID);
         }
 
         return result;

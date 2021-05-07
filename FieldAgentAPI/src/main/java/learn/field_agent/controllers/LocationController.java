@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080"})
+@CrossOrigin(origins = {"http://localhost:3306"})
 @RequestMapping("/api/location")
 public class LocationController {
 
@@ -38,10 +38,7 @@ public class LocationController {
 
     @PutMapping("/{locationId}")
     public ResponseEntity<Object> update(@PathVariable int locationId, @RequestBody Location location) {
-        if (locationId != location.getLocationId()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-
+        location.setLocationId(locationId);
         Result<Location> result = service.update(location);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

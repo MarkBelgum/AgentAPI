@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080"})
+@CrossOrigin(origins = {"http://localhost:3306"})
 @RequestMapping("/api/securityClearance")
 
 public class SecurityClearanceController {
@@ -42,22 +42,22 @@ public class SecurityClearanceController {
 
     @PutMapping("/{securityClearanceId}")
     public ResponseEntity<Object> update(@PathVariable int securityClearanceId, @RequestBody SecurityClearance securityClearance) {
-        if (securityClearanceId != securityClearance.getSecurityClearanceId()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        securityClearance.setSecurityClearanceId(securityClearanceId);
 
         Result<SecurityClearance> result = service.update(securityClearance);
         if (result.isSuccess()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.NO_CONTENT);
         }
 
         return ErrorResponse.build(result);
     }
 
     @DeleteMapping("/{securityClearanceId}")
-    public ResponseEntity<Void> deleteById(@PathVariable int securityClearanceId) {
-        if ((service.deleteById(securityClearanceId)).isSuccess()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Object> deleteById(@PathVariable int securityClearanceId) {
+        Result<SecurityClearance> result = service.deleteById(securityClearanceId);
+
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

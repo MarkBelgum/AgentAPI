@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080"})
+@CrossOrigin(origins = {"http://localhost:3306"})
 @RequestMapping("/api/agent/alias")
 public class AliasController {
     private final AgentService service;
@@ -33,9 +33,11 @@ public class AliasController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> update(@RequestBody Alias alias) {
+    @PutMapping("/{aliasId}")
+    public ResponseEntity<Object> update(@PathVariable int aliasId, @RequestBody Alias alias) {
+        alias.setAliasId(aliasId);
         Result<Alias> result = service.updateAlias(alias);
+
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -49,5 +51,4 @@ public class AliasController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }
